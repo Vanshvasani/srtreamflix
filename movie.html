@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamFlix - Movies</title>
+    <style>
+        /* Include all previous CSS styles from the home page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #141414;
+            color: #ffffff;
+            padding-top: 80px;
+        }
+
+        /* Navigation styles from previous page */
+        nav {
+            background-color: #0c0c0c;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            color: #e50914;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .logo a {
+            color: #e50914;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
+        /* New styles for movies page */
+        .movies-header {
+            padding: 2rem 5%;
+            background-color: #1a1a1a;
+            margin-bottom: 2rem;
+        }
+
+        .filter-section {
+            padding: 1rem 5%;
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-button {
+            background-color: #333;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .filter-button:hover {
+            background-color: #444;
+        }
+
+        .filter-button.active {
+            background-color: #e50914;
+        }
+
+        .movies-grid {
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .movie-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+        }
+
+        .movie-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .movie-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+        }
+
+        .movie-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .movie-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #cccccc;
+        }
+
+        .movie-rating {
+            color: #ffd700;
+        }
+
+        footer {
+            margin-top: 4rem;
+            background-color: #0c0c0c;
+            padding: 2rem 5%;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: #cccccc;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .filter-section {
+                flex-wrap: wrap;
+            }
+        }
+        /* Navigation with Search */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+/* Search Bar Styles */
+.search-container {
+    position: relative;
+    margin-left: auto;
+    margin-right: 2rem;
+}
+
+.search-bar {
+    background-color: #333;
+    border: none;
+    padding: 0.5rem 1rem 0.5rem 2.5rem;
+    border-radius: 20px;
+    color: white;
+    width: 250px;
+    transition: width 0.3s;
+}
+
+.search-bar:focus {
+    width: 300px;
+    outline: none;
+    background-color: #444;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 1rem;
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #1a1a1a;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.search-bar:focus + .search-results {
+    display: block;
+}
+
+.search-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.search-item:hover {
+    background-color: #333;
+}
+
+.search-item img {
+    width: 40px;
+    height: 60px;
+    object-fit: cover;
+    margin-right: 1rem;
+    border-radius: 4px;
+}
+
+.search-item-info {
+    flex-grow: 1;
+}
+
+.search-item-title {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.search-item-meta {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+/* Add to existing media queries */
+@media (max-width: 768px) {
+    .search-container {
+        margin-right: 0;
+    }
+
+    .search-bar {
+        width: 200px;
+    }
+
+    .search-bar:focus {
+        width: 220px;
+    }
+}
+    </style>
+</head>
+<body>
+    <nav>
+        <nav>
+            <div class="nav-left">
+                <div class="logo">
+                    <a href="index.html">StreamFlix</a>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="movie.html">Movies</a>
+                    <a href="tvshows.html">TV Shows</a>
+                    <a href="mylist.html">My List</a>
+                </div>
+            </div>
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-bar" placeholder="Search movies & TV shows...">
+                <div class="search-results">
+                    <!-- Example search results -->
+                    <div class="search-item">
+                        <img src="/api/placeholder/40/60" alt="Inception">
+                        <div class="search-item-info">
+                            <div class="search-item-title">Inception</div>
+                            <div class="search-item-meta">2010 • Action, Sci-Fi</div>
+                        </div>
+                    </div>
+                    <div class="search-item">
+                        <img src="/api/placeholder/40/60" alt="Breaking Bad">
+                        <div class="search-item-info">
+                            <div class="search-item-title">Breaking Bad</div>
+                            <div class="search-item-meta">TV Series • Drama</div>
+                        </div>
+                    </div>
+                    <div class="search-item">
+                        <img src="/api/placeholder/40/60" alt="The Dark Knight">
+                        <div class="search-item-info">
+                            <div class="search-item-title">The Dark Knight</div>
+                            <div class="search-item-meta">2008 • Action, Drama</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </nav>
+
+    <header class="movies-header">
+        <h1>Movies</h1>
+    </header>
+
+    <section class="filter-section">
+        <button class="filter-button active">All</button>
+        <button class="filter-button">Action</button>
+        <button class="filter-button">Comedy</button>
+        <button class="filter-button">Drama</button>
+        <button class="filter-button">Horror</button>
+        <button class="filter-button">Sci-Fi</button>
+    </section>
+
+    <main class="movies-grid">
+        <!-- Movie 1 -->
+        <div class="movie-card">
+            <img src="Matrix_2000x3000.jpg" alt="The Matrix">
+            <div class="movie-info">
+                <h3 class="movie-title">The Matrix</h3>
+                <div class="movie-details">
+                    <span class="movie-genre">Sci-Fi</span>
+                    <span class="movie-rating">★ 8.7</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movie 2 -->
+        <div class="movie-card">
+            <img src="inception_keyart.jpg" alt="Inception">
+            <div class="movie-info">
+                <h3 class="movie-title">Inception</h3>
+                <div class="movie-details">
+                    <span class="movie-genre">Action</span>
+                    <span class="movie-rating">★ 8.8</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movie 3 -->
+        <div class="movie-card">
+            <img src="shawshank.jpg" alt="The Shawshank Redemption">
+            <div class="movie-info">
+                <h3 class="movie-title">The Shawshank Redemption</h3>
+                <div class="movie-details">
+                    <span class="movie-genre">Drama</span>
+                    <span class="movie-rating">★ 9.3</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movie 4 -->
+        <div class="movie-card">
+            <img src="pulpfiction.jpg" alt="Pulp Fiction">
+            <div class="movie-info">
+                <h3 class="movie-title">Pulp Fiction</h3>
+                <div class="movie-details">
+                    <span class="movie-genre">Crime</span>
+                    <span class="movie-rating">★ 8.9</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movie 5 -->
+        <div class="movie-card">
+            <img src="thedarkknight.jpg" alt="The Dark Knight">
+            <div class="movie-info">
+                <h3 class="movie-title">The Dark Knight</h3>
+                <div class="movie-details">
+                    <span class="movie-genre">Action</span>
+                    <span class="movie-rating">★ 9.0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movie 6 -->
+        <div class="movie-card">
+            <img src="gump.jpg" alt="Forrest Gump">
+            <div class="movie-info">
+                <h3 class="movie-title">Forrest Gump</h3>
+                <div class="movie-details">
+                    <span class="movie-genre">Drama</span>
+                    <span class="movie-rating">★ 8.8</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add more movie cards as needed -->
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="logo">StreamFlix</div>
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Help Center</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

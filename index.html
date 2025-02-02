@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamFlix - Online Streaming</title>
+    <style>
+        /* Previous styles remain the same */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #141414;
+            color: #ffffff;
+        }
+
+        /* Updated Navigation with Search */
+        nav {
+            background-color: #0c0c0c;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            color: #e50914;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
+        /* New Search Bar Styles */
+        .search-container {
+            position: relative;
+            margin-left: auto;
+            margin-right: 2rem;
+        }
+
+        .search-bar {
+            background-color: #333;
+            border: none;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border-radius: 20px;
+            color: white;
+            width: 250px;
+            transition: width 0.3s;
+        }
+
+        .search-bar:focus {
+            width: 300px;
+            outline: none;
+            background-color: #444;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 1rem;
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #1a1a1a;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar:focus + .search-results {
+            display: block;
+        }
+
+        .search-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .search-item:hover {
+            background-color: #333;
+        }
+
+        .search-item img {
+            width: 40px;
+            height: 60px;
+            object-fit: cover;
+            margin-right: 1rem;
+            border-radius: 4px;
+        }
+
+        .search-item-info {
+            flex-grow: 1;
+        }
+
+        .search-item-title {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .search-item-meta {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        /* Rest of the existing styles remain the same */
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('/api/placeholder/1920/1080') center/cover;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            margin-top: 60px;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #cccccc;
+        }
+
+        .cta-button {
+            background-color: #e50914;
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: #f40612;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .search-container {
+                margin-right: 0;
+            }
+
+            .search-bar {
+                width: 200px;
+            }
+
+            .search-bar:focus {
+                width: 220px;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <div class="logo">StreamFlix</div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="movie.html">Movies</a>
+                <a href="tvshows.html">TV Shows</a>
+                <a href="mylist.html">My List</a>
+            </div>
+        </div>
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-bar" placeholder="Search movies & TV shows...">
+            <div class="search-results">
+                <!-- Example search results -->
+                <div class="search-item">
+                    <img src="/api/placeholder/40/60" alt="Inception">
+                    <div class="search-item-info">
+                        <div class="search-item-title">Inception</div>
+                        <div class="search-item-meta">2010 • Action, Sci-Fi</div>
+                    </div>
+                </div>
+                <div class="search-item">
+                    <img src="/api/placeholder/40/60" alt="Breaking Bad">
+                    <div class="search-item-info">
+                        <div class="search-item-title">Breaking Bad</div>
+                        <div class="search-item-meta">TV Series • Drama</div>
+                    </div>
+                </div>
+                <div class="search-item">
+                    <img src="/api/placeholder/40/60" alt="The Dark Knight">
+                    <div class="search-item-info">
+                        <div class="search-item-title">The Dark Knight</div>
+                        <div class="search-item-meta">2008 • Action, Drama</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Rest of the content remains the same -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Unlimited Movies & TV Shows</h1>
+            <p>Watch anywhere. Cancel anytime. Stream your favorite content in HD quality.</p>
+            <button class="cta-button">Start Watching</button>
+        </div>
+    </section>
+
+    <!-- Rest of the existing content -->
+</body>
+</html>
